@@ -8,9 +8,10 @@
 // ---------- WLAN ----------
 const char* ssid     = "WMOSKITO";
 const char* password = ".ubX54bVSt#vxW11m.";
+const char* myhostname = "tempSEnsorPool";
 
 // ---- Statische IP (an dein Netz anpassen) ----
-IPAddress local_IP(192, 168, 178, 132);
+IPAddress local_IP(192, 168, 178, 133);
 IPAddress gateway(192, 168, 178, 1);
 IPAddress subnet(255, 255, 255, 0);
 IPAddress dns(192, 168, 178, 1);
@@ -56,30 +57,36 @@ void handleTemperature() {
 
 void setup() {
   sensors.begin();
-  //Serial.begin(9600);
+  Serial.begin(9600);
 
   WiFi.hostname("bad-sensor");
   WiFi.mode(WIFI_STA);
 
   // ---- Statische IP setzen ----
-  WiFi.config(local_IP, gateway, subnet, dns);
+  /*WiFi.config(local_IP, gateway, subnet, dns);
   WiFi.persistent(false);
   WiFi.setAutoConnect(false);
   WiFi.setAutoReconnect(false);
-
+*/
+  WiFi.hostname(myhostname);
 
   WiFi.begin(ssid, password, channel, bssid, true);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(100);
-    //Serial.print(".");
+  Serial.print("MAC: ");
+   Serial.println(WiFi.macAddress());    //Serial.print(".");
   }
-  //Serial.println("Connected");
-  //Serial.print("Kanal: ");
-  //Serial.println(WiFi.channel());
 
-  //Serial.print("BSSID: ");
-  //Serial.println(WiFi.BSSIDstr());
+  Serial.print("MAC: ");
+   Serial.println(WiFi.macAddress());
+
+  Serial.println("Connected");
+  Serial.print("Kanal: ");
+  Serial.println(WiFi.channel());
+
+  Serial.print("BSSID: ");
+  Serial.println(WiFi.BSSIDstr());
   
   // 3. mDNS starten (damit bad-sensor.local funktioniert)
   if (MDNS.begin("bad-sensor")) {
